@@ -1,9 +1,14 @@
 const express = require('express');
 const app = express();
+app.use(express.json());
 const mongoose = require('mongoose');
 
 const dotenv = require('dotenv');
 dotenv.config();
+
+const StuffRoutes = require('./routes/stuff');
+const userRoutes = require('./routes/user');
+
 
 const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@${process.env.MONGO_CLUSTER}/?retryWrites=true&w=majority&appName=${process.env.MONGO_DB_NAME}`;
 
@@ -44,4 +49,6 @@ app.use('/api/stuff', (req, res, next) => {
   res.status(200).json(stuff);
 });
 
-module.exports = app;
+//app.use('./api/stuff', stuffRoutes);
+app.use('/api/auth', userRoutes);
+module.exports = app; 
