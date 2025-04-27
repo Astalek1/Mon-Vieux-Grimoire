@@ -31,4 +31,5 @@ mongoose.connect(uri,
 
 app.use('/api/books', bookRoutes);
 app.use('/api/auth', userRoutes);
+app.use('/images', express.static('images'));
 module.exports = app; 
