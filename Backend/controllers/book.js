@@ -94,9 +94,10 @@ exports.rateBook = (req, res, next) => {
 
       const total = book.ratings.reduce((sum, r) => sum + r.grade, 0);
       book.averageRating = total / book.ratings.length;
+      
 
       book.save()
-        .then(() => res.status(200).json({ message: 'Note enregistrée !' }))
+        .then(() => res.status(200).json(book))
         .catch(error => res.status(400).json({ error }));
     })
     .catch(error => res.status(500).json({ error }));
