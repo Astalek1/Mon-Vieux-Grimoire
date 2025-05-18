@@ -1,4 +1,5 @@
 const Book = require('../models/Book');
+const fs = require('fs');
 
 exports.getAllBooks = (req, res, next) => {
   Book.find()
@@ -7,8 +8,22 @@ exports.getAllBooks = (req, res, next) => {
 };
 
 exports.createBook = (req, res, next) => {
-  const bookObject = JSON.parse(req.body.book);
+  console.log('Fichier reçu par Multer :', req.file);
+  console.log('Contenu de req.body.book :', req.body.book);
+
+  if (!req.file) {
+    return res.status(400).json({ error: 'Aucun fichier image reçu.' });
+  }
+
+  let bookObject;
+  try {
+    bookObject = JSON.parse(req.body.book);
+  } catch (err) {
+    return res.status(400).json({ error: 'Format JSON invalide pour book.' });
+  }
+
   delete bookObject._id;
+
   const book = new Book({
     ...bookObject,
     userId: req.auth.userId,
@@ -17,8 +32,12 @@ exports.createBook = (req, res, next) => {
 
   book.save()
     .then(() => res.status(201).json({ message: 'Livre enregistré avec image !' }))
-    .catch(error => res.status(400).json({ error }));
+    .catch(error => {
+      console.error('Erreur lors de l\'enregistrement du livre :', error.message);
+      res.status(500).json({ error: error.message });
+    });
 };
+    
 
 
 exports.deleteBook = (req, res, next) => {
@@ -27,14 +46,31 @@ exports.deleteBook = (req, res, next) => {
       if (!book) {
         return res.status(404).json({ message: 'Livre non trouvé !' });
       }
+
       if (book.userId !== req.auth.userId) {
         return res.status(403).json({ message: 'Non autorisé à supprimer ce livre !' });
       }
-      Book.deleteOne({ _id: req.params.id })
-        .then(() => res.status(200).json({ message: 'Livre supprimé !' }))
-        .catch(error => res.status(400).json({ error }));
+
+      const filename = book.imageUrl.split('/images/')[1];
+      const filePath = `images/${filename}`;
+
+      console.log('Tentative de suppression de l’image :', filePath);
+
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error('Erreur suppression image :', err);
+          return res.status(500).json({ error: 'Erreur lors de la suppression de l’image.' });
+        }
+
+        Book.deleteOne({ _id: req.params.id })
+          .then(() => res.status(200).json({ message: 'Livre et image supprimés !' }))
+          .catch(error => res.status(400).json({ error }));
+      });
     })
-    .catch(error => res.status(500).json({ error }));
+    .catch(error => {
+      console.error('Erreur serveur :', error);
+      res.status(500).json({ error: 'Erreur lors de la recherche du livre.' });
+    });
 };
 
 exports.getOneBook = (req, res, next) => {
