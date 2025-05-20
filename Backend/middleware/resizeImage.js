@@ -7,7 +7,10 @@ module.exports = async (req, res, next) => {
     return next(); // pas de fichier à traiter
   }
 
-  const filename = `${Date.now()}.webp`;
+  const originalName = path.parse(req.file.originalname).name; // sans l'extension
+  const safeName = originalName.replace(/\s+/g, '-').replace(/[^\w\-]/g, '').toLowerCase();
+  const filename = `${safeName}-${Date.now()}.webp`;
+  
   const filePath = path.join('images', filename);
 
   try {
