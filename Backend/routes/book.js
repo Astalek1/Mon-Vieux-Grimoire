@@ -6,9 +6,6 @@ const multer = require('../middleware/multer-config');
 const resizeImage = require('../middleware/resizeImage');
 
 
-
-
-
 router.get('/bestrating', bookCtrl.getTopBooks);
 router.get('/:id', bookCtrl.getOneBook);
 router.get('/', bookCtrl.getAllBooks);

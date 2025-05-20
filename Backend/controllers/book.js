@@ -1,13 +1,13 @@
 const Book = require('../models/Book');
 const fs = require('fs');
 
-exports.getAllBooks = (req, res, next) => {
+exports.getAllBooks = (req, res,) => {
   Book.find()
     .then(books => res.status(200).json(books))
     .catch(error => res.status(400).json({ error }));
 };
 
-exports.createBook = (req, res, next) => {
+exports.createBook = (req, res,) => {
   console.log('Fichier reçu par Multer :', req.file);
   console.log('Contenu de req.body.book :', req.body.book);
 
@@ -40,7 +40,7 @@ exports.createBook = (req, res, next) => {
     
 
 
-exports.deleteBook = (req, res, next) => {
+exports.deleteBook = (req, res,) => {
   Book.findOne({ _id: req.params.id })
     .then(book => {
       if (!book) {
@@ -73,13 +73,13 @@ exports.deleteBook = (req, res, next) => {
     });
 };
 
-exports.getOneBook = (req, res, next) => {
+exports.getOneBook = (req, res,) => {
   Book.findOne({ _id: req.params.id })
     .then(book => res.status(200).json(book))
     .catch(error => res.status(404).json({ error }));
 };
 
-exports.updateBook = (req, res, next) => {
+exports.updateBook = (req, res,) => {
   Book.findOne({ _id: req.params.id })
     .then(book => {
       if (!book) {
@@ -107,7 +107,7 @@ exports.updateBook = (req, res, next) => {
 
 
 
-exports.rateBook = (req, res, next) => {
+exports.rateBook = (req, res,) => {
   const userId = req.auth.userId;
   const rating = req.body.rating;
 
@@ -139,7 +139,7 @@ exports.rateBook = (req, res, next) => {
     .catch(error => res.status(500).json({ error }));
 };
 
-exports.getTopBooks = (req, res, next) => {
+exports.getTopBooks = (req, res,) => {
   Book.find()
     .sort({ averageRating: -1 })
     .limit(3)
