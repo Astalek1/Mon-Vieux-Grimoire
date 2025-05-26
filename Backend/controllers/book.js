@@ -8,8 +8,6 @@ exports.getAllBooks = (req, res,) => {
 };
 
 exports.createBook = (req, res,) => {
-  console.log('Fichier reçu par Multer :', req.file);
-  console.log('Contenu de req.body.book :', req.body.book);
 
   if (!req.file) {
     return res.status(400).json({ error: 'Aucun fichier image reçu.' });
@@ -18,7 +16,7 @@ exports.createBook = (req, res,) => {
   let bookObject;
   try {
     bookObject = JSON.parse(req.body.book);
-  } catch (err) {
+  } catch (error) {
     return res.status(400).json({ error: 'Format JSON invalide pour book.' });
   }
 
@@ -38,7 +36,6 @@ exports.createBook = (req, res,) => {
     });
 };
     
-
 
 exports.deleteBook = (req, res,) => {
   Book.findOne({ _id: req.params.id })
