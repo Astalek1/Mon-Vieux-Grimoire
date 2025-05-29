@@ -15,12 +15,12 @@ exports.createBook = (req, res,) => {
 
   let bookObject;
   try {
-    bookObject = JSON.parse(req.body.book);
+    bookObject = JSON.parse(req.body.book);// lit les information
   } catch (error) {
     return res.status(400).json({ error: 'Format JSON invalide pour book.' });
   }
 
-  delete bookObject._id;
+  delete bookObject._id; 
 
   const book = new Book({
     ...bookObject,
@@ -53,9 +53,9 @@ exports.deleteBook = (req, res,) => {
 
       console.log('Tentative de suppression de l’image :', filePath);
 
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.error('Erreur suppression image :', err);
+      fs.unlink(filePath, (error) => {
+        if (error) {
+          console.error('Erreur suppression image :', error);
           return res.status(500).json({ error: 'Erreur lors de la suppression de l’image.' });
         }
 
@@ -136,7 +136,7 @@ exports.rateBook = (req, res,) => {
     .catch(error => res.status(500).json({ error }));
 };
 
-exports.getTopBooks = (req, res,) => {
+exports.getTopBooks = (req, res) => {
   Book.find()
     .sort({ averageRating: -1 })
     .limit(3)

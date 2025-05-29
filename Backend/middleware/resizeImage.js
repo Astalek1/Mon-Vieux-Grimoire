@@ -1,5 +1,4 @@
 const sharp = require('sharp');
-const fs = require('fs');
 const path = require('path');
 
 module.exports = async (req, res, next) => {
@@ -8,10 +7,9 @@ module.exports = async (req, res, next) => {
   }
 
   const originalName = path.parse(req.file.originalname).name; // sans l'extension
-  const safeName = originalName.replace(/\s+/g, '-').replace(/[^\w\-]/g, '').toLowerCase();
-  const filename = `${safeName}-${Date.now()}.webp`;
-  
-  const filePath = path.join('images', filename);
+  const safeName = originalName.replace(/\s+/g, '-').replace(/[^\w\-]/g, '').toLowerCase(); //netoyage du nom
+  const filename = `${safeName}-${Date.now()}.webp`; //génére un nom avec .webp
+  const filePath = path.join('images', filename); // chemin dossier images
 
   try {
     await sharp(req.file.buffer)
@@ -20,8 +18,8 @@ module.exports = async (req, res, next) => {
 
     req.file.filename = filename; // important pour le contrôleur
     next();
-  } catch (err) {
-    console.error('Erreur de redimensionnement Sharp :', err);
+  } catch (error) {
+    console.error('Erreur de redimensionnement Sharp :', error);
     res.status(500).json({ error: "Erreur lors du traitement de l’image." });
   }
 };
