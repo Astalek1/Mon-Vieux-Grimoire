@@ -2,6 +2,7 @@
   "name": "mon-vieux-grimoire-frontend",
   "version": "0.1.0",
   "private": true,
+   "homepage": "https://astalek1.github.io/Mon-Vieux-Grimoire",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
@@ -17,6 +18,7 @@
     "react-router-dom": "^6.4.5",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
+   
   },
   "scripts": {
     "start": "react-scripts start",
@@ -50,4 +52,5 @@
     "eslint-plugin-react": "^7.31.11",
     "eslint-plugin-react-hooks": "^4.6.0"
   }
+
 }
