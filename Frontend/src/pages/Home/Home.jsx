@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 import BookItem from '../../components/Books/BookItem/BookItem';
 import Banner from '../../images/home_banner.jpg';
 import styles from './Home.module.css';
-import { getBooks } from '../../lib/common';
+//import { getBooks } from '../../lib/common';
+
+import { getLocalBooks } from '../../lib/common';
 
 function Home() {
   const [books, setBooks] = useState(null);
@@ -13,7 +15,7 @@ function Home() {
 
   useEffect(() => {
     async function getBooksList() {
-      const data = await getBooks();
+      const data = await getLocalBooks();
       if (data) {
         setBooks(data);
         setLoading(false);
@@ -39,6 +41,10 @@ function Home() {
     </div>
 
   );
+
 }
 
 export default Home;
+
+
+
