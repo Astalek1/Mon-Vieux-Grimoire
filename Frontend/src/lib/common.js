@@ -192,12 +192,4 @@ export async function getLocalBooks() {
   }
 }
 
-export async function getLocalBooks() {
-  try {
-    const response = await axios.get('data/data.json');
-    return response.data;
-  } catch (err) {
-    console.error('Erreur chargement data.json', err);
-    return [];
-  }
-}
+
