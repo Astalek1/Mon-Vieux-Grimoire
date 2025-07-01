@@ -181,5 +181,3 @@ export async function updateBook(data, id) {
     return { error: true, message: err.message };
   }
 }
-
-
