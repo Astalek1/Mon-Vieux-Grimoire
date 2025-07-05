@@ -1,4 +1,7 @@
-const API_URL = 'http://localhost:4000';
+const API_URL = process.env.NODE_ENV === 'production'
+  ? 'https://mon-vieux-grimoire-production.up.railway.app'
+  : 'http://localhost:4000';
+
 export const API_ROUTES = {
   SIGN_UP: `${API_URL}/api/auth/signup`,
   SIGN_IN: `${API_URL}/api/auth/login`,
