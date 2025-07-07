@@ -1,5 +1,5 @@
 const Book = require('../models/Book');
-const cloudinary = require('../middleware/cloudinaryConfig');
+const cloudinary = require('../middleware/cloudinary-config');
 
 // GET : récupérer tous les livres
 exports.getAllBooks = (req, res) => {
