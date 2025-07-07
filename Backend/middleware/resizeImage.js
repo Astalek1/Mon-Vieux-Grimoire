@@ -9,12 +9,12 @@ module.exports = async (req, res, next) => {
   const originalName = path.parse(req.file.originalname).name; // sans l'extension
   const safeName = originalName.replace(/\s+/g, '-').replace(/[^\w\-]/g, '').toLowerCase(); //netoyage du nom
   const filename = `${safeName}-${Date.now()}.webp`; //génére un nom avec .webp
-  const filePath = path.join('images', filename); // chemin dossier images
+
 
   try {
-    await sharp(req.file.buffer)
+    req.file.buffer = await sharp(req.file.buffer)
       .resize(206, 260, { fit: 'contain', background: { r: 255, g: 255, b: 255, alpha: 1 } })
-      .toFile(filePath);
+      .toBuffer();
 
     req.file.filename = filename; // important pour le contrôleur
     next();

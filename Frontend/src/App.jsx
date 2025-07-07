@@ -20,8 +20,9 @@ function App() {
   useEffect(() => {
     setUser(connectedUser);
   }, [connectedUser]);
+
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/Mon-Vieux-Grimoire">
       <div>
         <ScrollToTop />
         <Header user={user} setUser={setUser} />
