@@ -31,26 +31,32 @@ exports.createBook = async (req, res) => {
   delete bookObject._id;
 
   try {
-    const uploadResult = await new Promise((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream(
-        { folder: 'mon-vieux-grimoire' },
-        (error, result) => (error ? reject(error) : resolve(result))
-      );
-      stream.end(req.file.buffer);
-    });
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: 'mon-vieux-grimoire' },
+      async (error, uploadResult) => {
+        if (error) {
+          return res.status(500).json({ error: 'Échec de l\'upload sur Cloudinary.' });
+        }
 
-    const book = new Book({
-      ...bookObject,
-      userId: req.auth.userId,
-      imageUrl: uploadResult.secure_url,
-      cloudinaryId: uploadResult.public_id
-    });
+        const book = new Book({
+          ...bookObject,
+          userId: req.auth.userId,
+          imageUrl: uploadResult.secure_url,
+          cloudinaryId: uploadResult.public_id
+        });
 
-    await book.save();
-    res.status(201).json({ message: 'Livre enregistré avec image Cloudinary !' });
+        try {
+          await book.save();
+          res.status(201).json({ message: 'Livre enregistré avec image Cloudinary !' });
+        } catch (saveError) {
+          res.status(500).json({ error: 'Erreur lors de l’enregistrement du livre.' });
+        }
+      }
+    );
+
+    stream.end(req.file.buffer);
   } catch (err) {
-    console.error('Erreur Cloudinary ou MongoDB :', err);
-    res.status(500).json({ error: 'Erreur lors de la création du livre.' });
+    res.status(500).json({ error: 'Erreur lors de la préparation de l’upload.' });
   }
 };
 
