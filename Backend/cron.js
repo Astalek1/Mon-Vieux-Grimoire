@@ -2,9 +2,12 @@ const mongoose = require("mongoose");
 
 (async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
+    const uri = process.env.MONGODB_URI;
+    if (!uri) {
+      throw new Error("MONGODB_URI non défini !");
+    }
 
-    // Ping
+    await mongoose.connect(uri);
     await mongoose.connection.db.admin().command({ ping: 1 });
 
     console.log("Health DB OK");
@@ -14,3 +17,4 @@ const mongoose = require("mongoose");
     process.exit(1);
   }
 })();
+
