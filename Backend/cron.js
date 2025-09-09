@@ -1,10 +1,12 @@
-
 const mongoose = require("mongoose");
 
 (async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI);
+
+    // Ping
     await mongoose.connection.db.admin().command({ ping: 1 });
+
     console.log("Health DB OK");
     await mongoose.disconnect();
   } catch (err) {
